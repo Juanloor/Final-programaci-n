@@ -1,6 +1,6 @@
 # Final-programaci-n
 desarrollo del trabajo final de programación. Equipo: Juan José Loor y Matías Berrio
-Nuestro proyecto final para el trabajo final de programación, se basa en un analisis profundo de clasificación del dataset
+Nuestro proyecto final para el trabajo de programación, se basa en un analisis profundo de clasificación del dataset
 de setas extraido de repositorio publico UCI Machine learning Repository. Para poder realizar esto seguimos ciertos pasos 
 que aseguran la obtención de resultados consisos primero realizamos la carga y exploración del dataset simulando datos 
 faltantes presentado el caso sumado a esto se realizaron procesos de estandarizacion y se aplicaron graficas descriptivas, 
