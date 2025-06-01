@@ -1,0 +1,74 @@
+# Validación cruzada estratificada para Random Forest
+
+splits = 10
+folds = range(1,splits+1)
+skf = StratifiedKFold(n_splits=splits, shuffle=True, random_state=42)
+
+X = pd.DataFrame(X_standard)
+y = df2['target']
+
+scores = []
+
+for train_index, test_index in skf.split(X, y):
+    X_train, X_test = X.iloc[train_index], X.iloc[test_index]
+    y_train, y_test = y.iloc[train_index], y.iloc[test_index]
+    
+    model = RandomForestClassifier(random_state=42)
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    
+    acc = accuracy_score(y_test, y_pred)
+    scores.append(acc)
+
+print(f"Precisión: {np.mean(scores):.2f} \u00B1 {np.std(scores):.2f}")
+plt.figure(figsize=(10,5))
+plt.plot(folds,scores,'--*')
+plt.xticks(folds)
+plt.xlabel('Fold')
+plt.ylabel('Accuracy')
+plt.show()
+
+# Validación cruzada estratificada para Logic Regression
+
+splits = 10
+folds = range(1, splits+1)
+
+skf = StratifiedKFold(n_splits=splits, shuffle=True, random_state=42)
+
+X = pd.DataFrame(X_standard)
+y = df2['target']
+
+scores = []
+
+for train_index, test_index in skf.split(X, y):
+    X_train, X_test = X.iloc[train_index], X.iloc[test_index]
+    y_train, y_test = y.iloc[train_index], y.iloc[test_index]
+    
+    model = LogisticRegression(random_state=42, max_iter=1000)
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    
+    acc = accuracy_score(y_test, y_pred)
+    scores.append(acc)
+
+plt.figure(figsize=(10,5))
+plt.plot(folds, scores, '--*')
+plt.xticks(folds)
+plt.xlabel('Fold')
+plt.ylabel('Accuracy')
+plt.title('Precisión por Fold - Regresión Logística')
+plt.show()
+
+# test t pareado para modelos usados
+
+from scipy.stats import ttest_rel
+t_stat, p_value = ttest_rel(rf_scores, lr_scores)
+
+print(f"T-statistic: {t_stat:.4f}")
+print(f"P-value: {p_value:.4f}")
+
+alpha = 0.05
+if p_value < alpha:
+    print("Hay diferencia estadísticamente significativa entre los dos modelos.")
+else:
+    print("No hay diferencia estadísticamente significativa entre los dos modelos.")
